@@ -1,8 +1,23 @@
 {
-  "name": "object-detector-image-web-assembly",
-  "version": "1.0.0",
-  "description": "object-detector-image-web-assembly",
-  "main": "index.js",
-  "author": "Emir Marques <emirdeliz@gmail.com>",
-  "license": "MIT"
+	"name": "object-detector-image-web-assembly",
+	"version": "1.0.0",
+	"description": "object-detector-image-web-assembly",
+	"main": "index.js",
+	"author": "Emir Marques <emirdeliz@gmail.com>",
+	"license": "MIT",
+	"scripts": {
+		"build": "npm run server:build && npm run client:build",
+		"server:build": "esbuild server/src/index.ts --bundle --outfile=built/server.js --platform=node",
+		"client:build": "esbuild client/src/index.ts --bundle --outfile=built/app.js",
+		"start": "node built/server.js"
+	},
+	"dependencies": {
+		"@types/express": "^4.17.13",
+		"@types/react": "^17.0.40",
+		"@types/react-dom": "^17.0.13",
+		"esbuild": "^0.14.0",
+		"express": "^4.17.1",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
+	}
 }
