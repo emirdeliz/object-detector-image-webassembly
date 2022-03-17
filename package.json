@@ -1,0 +1,8 @@
+{
+  "name": "object-detector-image-web-assembly",
+  "version": "1.0.0",
+  "description": "object-detector-image-web-assembly",
+  "main": "index.js",
+  "author": "Emir Marques <emirdeliz@gmail.com>",
+  "license": "MIT"
+}
