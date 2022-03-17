@@ -19,3 +19,5 @@ export const App: React.FC = () => {
 hydrate(<App />, document.getElementById('root'));
 
 // clear && yarn server:build && yarn start
+
+// https://github.com/adamjberg/react-ssr
