@@ -1,12 +1,13 @@
-import express from 'express';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
+import express from 'express';
 import { App } from '../../client/src/App';
 
 const app = express();
 app.get('/', (_req, res) => {
-    const app = renderToString(<App />);
+	const app = renderToString(<App />);
 
-    const html = `
+	const html = `
         <html lang='en'>
         <head>
             <script src='app.js' async defer></script>
@@ -15,8 +16,8 @@ app.get('/', (_req, res) => {
             <div id='root'>${app}</div>
         </body>
         </html>
-    `
-    res.send(html);
+    `;
+	res.send(html);
 });
 
 app.use(express.static('./built'));
