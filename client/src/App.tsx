@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { hydrate } from 'react-dom';
 
-export const App: React.FC = () => {
+const AppBase: React.FC = () => {
 	const [clientMessage, setClientMessage] = useState('');
 
 	useEffect(() => {
@@ -16,7 +15,7 @@ export const App: React.FC = () => {
 	);
 };
 
-hydrate(<App />, document.getElementById('root'));
+export const App = <AppBase />;
 
 // clear && yarn server:build && yarn start
 
