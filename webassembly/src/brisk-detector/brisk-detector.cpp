@@ -9,7 +9,8 @@
 // https://www.google.com/search?q=ndvi&sxsrf=APq-WBtkySwBa6BGjBxEylPPSfHMzbcrOg:1647268291533&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjr8PbK6MX2AhWUqZUCHd_rCPcQ_AUoAXoECAEQAw&biw=2192&bih=1060&dpr=2.2#imgrc=6WhEgrzjVAVEDM&imgdii=aDdOfd4xNCDNWM
 // clear && rm -rf build && mkdir build && cd build && cmake .. && make && ./object_detector_on_image_cpp && cd ..
 // clear && em++ build/CMakeFiles/object_detector_on_image_cpp.dir/src/brisk-detector.cpp.o src/brisk-detector.cpp -o object-detector-image-cpp.js \ `pkg-config --cflags --libs opencv`
-
+// export PKG_CONFIG_PATH=/opt/homebrew/Cellar/opencv/4.5.5/include/opencv4
+// 
 using namespace cv;
 using namespace std;
 
