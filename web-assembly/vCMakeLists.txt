@@ -7,9 +7,9 @@ project(object_detector_on_image_cpp)
 set(CMAKE_CXX_STANDARD 17)
 
 # Set Release as default build type
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release)
-endif(NOT CMAKE_BUILD_TYPE)
+# if(NOT CMAKE_BUILD_TYPE)
+#     set(CMAKE_BUILD_TYPE Release)
+# endif(NOT CMAKE_BUILD_TYPE)
 
 # Does not work
 # find_package(OpenCV REQUIRED PATHS "${OPENCV_DIR}/build_wasm" NO_DEFAULT_PATH)
@@ -37,12 +37,10 @@ add_executable(object_detector_on_image_cpp src/brisk-detector.cpp)
 # file(GLOB opencv_lib_core "${OPENCV_DIR}/lib/libopencv_core.a")
 # target_link_libraries(object_detector_on_image_cpp ${opencv_lib_core})
 
-add_definitions("-s EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'")
-add_definitions("-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\",\"cwrap\"]'")
-add_definitions("-s EXPORTED_FUNCTIONS='[\"_testInt\"]'")
+set(LINK_FLAGS -s WASM=1 -s EXPORTED_FUNCTIONS='["_detect"]')
 
 # Specify linker arguments
-set_target_properties(object_detector_on_image_cpp PROPERTIES LINK_FLAGS "-s EXPORTED_RUNTIME_METHODS=cwrap -s EXPORTED_FUNCTIONS=_free -s MODULARIZE=1 -s EXPORT_NAME=BriskDetector")
+set_target_properties(object_detector_on_image_cpp PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
 
 # Set this if you want to to generate sample html file
 set(CMAKE_EXECUTABLE_SUFFIX ".html")
