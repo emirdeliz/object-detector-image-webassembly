@@ -3,7 +3,6 @@
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 #endif
-
 vector<DMatch> detectImageInsideImage(vector<Mat> images)
 {
 	Mat img1 = images[0];
