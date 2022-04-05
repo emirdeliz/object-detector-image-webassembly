@@ -1,11 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const AppBase: React.FC = () => {
 	const [clientMessage, setClientMessage] = useState('');
 
+	const initialize = useCallback(() => {
+		const importObject = {
+			imports: {
+				imported_func: (arg) => {
+					console.log(arg);
+				},
+			},
+		};
+
+		fetch('/web-assembly/object_detector_on_image_web_assembly.wasm')
+			.then((response) => response.arrayBuffer())
+			.then((bytes) => WebAssembly.instantiate(bytes, importObject))
+			.then((results) => {
+				console.log(results.instance.exports);
+			});
+	}, []);
+
 	useEffect(() => {
 		setClientMessage('Hello From React');
-	});
+		initialize();
+	}, []);
 
 	return (
 		<>

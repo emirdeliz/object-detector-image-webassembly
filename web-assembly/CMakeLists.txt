@@ -13,11 +13,6 @@ include_directories(${opencv_include_modules})
 # Our object_detector_on_image_web_assembly world executable
 add_executable(object_detector_on_image_web_assembly src/brisk-detector.cpp)
 
-# set(LINK_FLAGS "-o brisk-detector.wasm -s WASM=1 -s MODULARIZE=1 -s EXPORT_NAME=Module")
-
-# Specify linker arguments
-# set_target_properties(object_detector_on_image_web_assembly PROPERTIES LINK_FLAGS "${LINK_FLAGS}")
-
 set_target_properties(object_detector_on_image_web_assembly PROPERTIES LINK_FLAGS 
 	"--bind --no-entry -s WASM=1")
 
