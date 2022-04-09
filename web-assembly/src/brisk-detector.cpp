@@ -1,8 +1,7 @@
 #include "../../../object-detector-image-cpp/src/utils.h"
+#include "emscripten.h"
 
-#ifdef __EMSCRIPTEN__
-	#include <emscripten.h>
-#endif
+EMSCRIPTEN_KEEPALIVE
 vector<DMatch> detectImageInsideImage(vector<Mat> images)
 {
 	Mat img1 = images[0];

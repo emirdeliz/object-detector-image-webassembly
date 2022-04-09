@@ -1,4 +1,4 @@
-rm -rf build
+rm -rf ../built/web-assembly
 
 sleep 1.5s
 
