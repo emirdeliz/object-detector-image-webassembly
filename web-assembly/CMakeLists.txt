@@ -14,6 +14,6 @@ include_directories(${opencv_include_modules})
 add_executable(object_detector_on_image_web_assembly src/brisk-detector.cpp)
 
 set_target_properties(object_detector_on_image_web_assembly PROPERTIES LINK_FLAGS 
-	"--bind --no-entry -s WASM=1")
+	"--bind --no-entry -s WASM=1 -s EXPORT_ALL=1 -s STANDALONE_WASM --no-entry")
 
-set(CMAKE_EXECUTABLE_SUFFIX ".wasm")
+set(CMAKE_EXECUTABLE_SUFFIX ".html")

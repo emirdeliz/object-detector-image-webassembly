@@ -9,6 +9,7 @@
 		"build": "npm run server:build && npm run client:build",
 		"server:build": "esbuild server/src/index.ts --bundle --outfile=built/index.js --platform=node",
 		"client:build": "esbuild client/src/index.ts --bundle --outfile=built/app.js",
+		"start:full": "yarn client:build && yarn server:build && yarn start",
 		"start": "node built/server.js"
 	},
 	"dependencies": {

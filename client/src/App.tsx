@@ -6,18 +6,18 @@ const AppBase: React.FC = () => {
 	const initialize = useCallback(() => {
 		const importObject = {
 			imports: {
-				imported_func: (arg) => {
+				detectImageInsideImage: (arg) => {
 					console.log(arg);
 				},
 			},
 		};
 
-		fetch('/web-assembly/object_detector_on_image_web_assembly.wasm')
-			.then((response) => response.arrayBuffer())
-			.then((bytes) => WebAssembly.instantiate(bytes, importObject))
-			.then((results) => {
-				console.log(results.instance.exports);
-			});
+		// fetch('/web-assembly/object_detector_on_image_web_assembly.wasm')
+		// 	.then((response) => response.arrayBuffer())
+		// 	.then((bytes) => WebAssembly.instantiate(bytes, importObject))
+		// 	.then((results) => {
+		// 		console.log(results.instance.exports);
+		// 	});
 	}, []);
 
 	useEffect(() => {
