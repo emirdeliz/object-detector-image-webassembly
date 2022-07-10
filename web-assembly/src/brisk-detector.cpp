@@ -1,4 +1,5 @@
 #include "../../../object-detector-image-cpp/src/utils.h"
+#include "emscripten.h"
 
 vector<DMatch> detectImageInsideImage(vector<Mat> images)
 {
