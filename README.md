@@ -1,2 +1,2 @@
-# object-detector-image-web-assembly
-object-detector-image-web-assembly
+# object-detector-image-webassembly
+object-detector-image-webassembly
