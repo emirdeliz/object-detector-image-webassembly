@@ -1,0 +1,14 @@
+version: '3'
+services:
+  object-detector-image-web-assembly:
+    command: ['sh', 'docker-entrypoint.sh']
+    build:
+      context: .
+      dockerfile: Dockerfile
+    stdin_open: true
+    volumes:
+      - appcode-unison-sync:/source:nocopy
+
+volumes:
+  appcode-unison-sync:
+    external: true

@@ -109,3 +109,6 @@ built/
 
 # TernJS port file
 .tern-port
+
+# History vs plugin
+.history
