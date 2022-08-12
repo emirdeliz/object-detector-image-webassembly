@@ -7,8 +7,9 @@ services:
       dockerfile: Dockerfile
     stdin_open: true
     volumes:
-      - appcode-unison-sync:/source:nocopy
+      - app-unison-sync:/apps:nocopy
 
 volumes:
-  appcode-unison-sync:
-    external: true
+  app-unison-sync:
+    external:
+      name: ${COMPOSE_PROJECT_NAME}-unison-sync

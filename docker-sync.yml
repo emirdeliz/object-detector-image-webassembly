@@ -12,7 +12,7 @@ options:
   project_root: 'pwd'
 syncs:
   #IMPORTANT: ensure this name is unique and does not match your other application container name
-  appcode-unison-sync: #tip: add -sync and you keep consistent names as a convention
+  ${SYNC_NAME}-unison-sync: #tip: add -sync and you keep consistent names as a convention
     # unison 2 way-sync
     sync_strategy: 'unison'
     # if you want to run a custom image, set it here
