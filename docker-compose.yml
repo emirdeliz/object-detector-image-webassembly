@@ -1,13 +1,13 @@
 version: '3'
 services:
   object-detector-image-web-assembly:
-    command: ['sh', 'docker-entrypoint.sh']
+    # command: ['sh', 'docker-entrypoint.sh']
     build:
       context: .
       dockerfile: Dockerfile
     stdin_open: true
     volumes:
-      - app-unison-sync:/apps:nocopy
+      - app-unison-sync:/home/docker/apps:nocopy
 
 volumes:
   app-unison-sync:
