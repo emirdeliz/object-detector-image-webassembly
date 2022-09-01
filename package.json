@@ -13,7 +13,8 @@
 		"start": "node built/server.js",
 		"sync:restart": "DOCKER_SYNC_ENV_FILE=.env.docker-sync docker-sync restart",
 		"compose:up": "docker-compose up -d",
-		"build:wa": "sh ./webassembly/build.sh"
+		"build:wa": "sh ./webassembly/build.sh",
+		"make:symlink": "sh object-detector-image-webassembly/make-symlink.sh"
 	},
 	"dependencies": {
 		"@types/express": "^4.17.13",

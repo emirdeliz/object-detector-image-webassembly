@@ -24,11 +24,11 @@
 	// An array of extension IDs that specify the extensions that should be installed inside the container when it is created.
 	"extensions": [
 		"Shan.code-settings-sync"
-	]
+	],
 	// "postAttachCommand": "bash",
 
 	// A command string or list of command arguments to run on the
-	// "initializeCommand": "docker-sync restart -c flut_base_web_docker/docker-sync.yml",
+	"initializeCommand": "docker-sync restart -c object-detector-image-webassembly/docker-sync.yml"
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
