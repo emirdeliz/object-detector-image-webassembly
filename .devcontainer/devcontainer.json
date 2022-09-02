@@ -28,7 +28,7 @@
 	// "postAttachCommand": "bash",
 
 	// A command string or list of command arguments to run on the
-	"initializeCommand": "docker-sync restart -c object-detector-image-webassembly/docker-sync.yml"
+	"initializeCommand": "SYNC_NAME=\"$(basename $PWD)\" docker-sync restart -c object-detector-image-webassembly/docker-sync.yml"
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
