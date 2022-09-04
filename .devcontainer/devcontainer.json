@@ -7,12 +7,12 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../object-detector-image-webassembly/docker-compose.yml"
+		"../docker-compose.yml"
 	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
 	// use. Update this value and .devcontainer/docker-compose.yml to the real service name.
-	"service": "object-detector-image-web-assembly",
+	"service": "app-service",
 
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
 	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
@@ -21,14 +21,20 @@
 	// Set *default* container specific settings.json values on container create.
 	"settings": {},
 
+	// A set of name-value pairs that sets or overrides environment variables for the devcontainer.json
+	// supporting service / tool (or sub-processes like terminals) but not the container as a whole.
+	// Environment and pre-defined variables may be referenced in the values.
+	// Updates are applied when the devcontainer.json supporting service / tool is restarted (or the window is reloaded)
+	// "remoteEnv": {
+	// 	"SYNC_NAME": "\"$(basename $PWD)\""
+	// },
+
 	// An array of extension IDs that specify the extensions that should be installed inside the container when it is created.
-	"extensions": [
-		"Shan.code-settings-sync"
-	],
+	"extensions": ["Shan.code-settings-sync"],
 	// "postAttachCommand": "bash",
 
 	// A command string or list of command arguments to run on the
-	"initializeCommand": "SYNC_NAME=\"$(basename $PWD)\" docker-sync restart -c object-detector-image-webassembly/docker-sync.yml"
+	"initializeCommand": "SYNC_NAME=\"$(basename $PWD | tr '[:upper:]' '[:lower:]')\" docker-sync restart"
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

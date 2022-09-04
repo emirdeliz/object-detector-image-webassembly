@@ -1,10 +1,8 @@
 version: '3'
 services:
-  object-detector-image-web-assembly:
+  app-service:
     # command: ['sh', 'docker-entrypoint.sh']
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: emirdeliz/cpp-opencv:latest
     stdin_open: true
     volumes:
       - app-unison-sync:/home/docker/apps:nocopy
