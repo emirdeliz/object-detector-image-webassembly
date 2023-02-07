@@ -6,15 +6,12 @@
 	"author": "Emir Marques <emirdeliz@gmail.com>",
 	"license": "MIT",
 	"scripts": {
-		"build": "npm run server:build && npm run client:build",
-		"server:build": "esbuild server/src/index.ts --bundle --outfile=built/index.js --platform=node",
-		"client:build": "esbuild client/src/index.ts --bundle --outfile=built/app.js",
-		"start:full": "yarn client:build && yarn server:build && yarn start",
-		"start": "node built/server.js",
-		"sync:restart": "DOCKER_SYNC_ENV_FILE=.env.docker-sync docker-sync restart",
-		"compose:up": "docker-compose up -d",
-		"build:wa": "sh ./webassembly/build.sh",
-		"make:symlink": "sh object-detector-image-webassembly/make-symlink.sh"
+		"build": "yarn run server:build & yarn run client:build",
+		"server:build": "esbuild src/server/index.ts --bundle --outfile=dist/server.js --platform=node && yarn start",
+		"client:build": "esbuild src/client/index.ts --bundle --watch --outfile=dist/app.js",
+		"start:all": "yarn build",
+		"start": "node dist/server.js",
+		"build:webassembly": "sh webassembly/build.sh"
 	},
 	"dependencies": {
 		"@types/express": "^4.17.13",
@@ -22,6 +19,7 @@
 		"@types/react-dom": "^17.0.13",
 		"esbuild": "^0.14.0",
 		"express": "^4.17.1",
+		"object-detector-image-cpp": "https://github.com/emirdeliz/object-detector-image-cpp.git",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	}

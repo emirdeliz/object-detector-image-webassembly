@@ -1,5 +1,5 @@
+import { App } from '../client/App';
 import { renderToString } from 'react-dom/server';
-import { App } from '../../client/src/App';
 
 const app = renderToString(App);
 const html = `
