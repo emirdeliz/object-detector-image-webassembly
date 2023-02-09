@@ -48,6 +48,6 @@ set_target_properties(
         -s MINIMAL_RUNTIME=1 \
         -s EXPORTED_RUNTIME_METHODS=cwrap \
         -s EXPORTED_FUNCTIONS=_free \
-        -s EXPORT_NAME=objectDetector \
+        -s EXPORT_NAME=cdetector \
     "
 )

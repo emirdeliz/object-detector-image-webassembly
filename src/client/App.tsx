@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { detectImageInsideImage } from '../../webassembly/src/CUtils';
+
+import { detectImageInsideImage } from '../../webassembly/src/cUtils';
 
 const getFileFromUrl = async (name: string) => { 
 	const response = await fetch(`http://localhost:3000/${name}`);
