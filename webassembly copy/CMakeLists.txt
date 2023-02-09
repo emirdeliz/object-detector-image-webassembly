@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+project( object_detector_on_image_cpp )
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable( object_detector_on_image_cpp cpp/brisk-detector.cpp )
+target_link_libraries( object_detector_on_image_cpp ${OpenCV_LIBS} )

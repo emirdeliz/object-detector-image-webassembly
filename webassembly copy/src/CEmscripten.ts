@@ -1,42 +1,7 @@
 /**
  * All method of this file was used internally by emscripten. Avoid to edit them.
  */
-import { checkIsNodeEnvironment } from '@/helpers';
-import { getCZBarInstance } from './CZBarWasm';
-
-/**
- * This method get the clock time in milliseconds. Used internally by emscripten.
- * @param clkId - The clock type.
- * @param {number} tp - The timepoint.
- * @returns {Promise<number>} - Always 0;
- */
-export const clockGetTime = async (
-	clkId: number,
-	tp: number
-): Promise<number> => {
-	const { HEAP32 } = await getCZBarInstance();
-	let now: number;
-	let emscriptenGetNow: () => number;
-	if (checkIsNodeEnvironment()) {
-		emscriptenGetNow = () => {
-			const t = process['hrtime']();
-			return t[0] * 1e3 + t[1] / 1e6;
-		};
-	} else {
-		emscriptenGetNow = () => performance.now();
-	}
-
-	if (clkId === 0) {
-		now = Date.now();
-	} else if (clkId === 1 || clkId === 4) {
-		now = emscriptenGetNow();
-	} else {
-		return -1;
-	}
-	HEAP32[tp >> 2] = (now / 1e3) | 0;
-	HEAP32[(tp + 4) >> 2] = ((now % 1e3) * 1e3 * 1e3) | 0;
-	return 0;
-};
+import { getCInstance } from './CWasm';
 
 /**
  * This method write the data to the memory. Used internally by emscripten.
@@ -52,7 +17,7 @@ export const fdWrite = async (
 	iovcnt: number,
 	pnum: number
 ): Promise<number> => {
-	const { HEAP32 } = await getCZBarInstance();
+	const { HEAP32 } = await getCInstance();
 	let num = 0;
 	for (let i = 0; i < iovcnt; i++) {
 		const len = HEAP32[(iov + 4) >> 2];
@@ -68,9 +33,9 @@ export const fdWrite = async (
  * @param {number} size - The size of the new memory.
  * @returns {Promise<number>} Always 1.
  */
-const emscriptenReallocBuffer = async (size: number): Promise<number> => {
+const emscriptenReallocBuffer = async (size: number): Promise<number|undefined> => {
 	try {
-		const { buffer, memory } = await getCZBarInstance();
+		const { buffer, memory } = await getCInstance();
 		memory.grow((size - buffer.byteLength + 65535) >>> 16);
 		updateGlobalBufferAndViews(memory.buffer);
 		return 1;
@@ -104,7 +69,7 @@ export const emscriptenMemcpyBig = async (
 	src: number,
 	num: number
 ): Promise<void> => {
-	const { HEAPU8 } = await getCZBarInstance();
+	const { HEAPU8 } = await getCInstance();
 	HEAPU8.copyWithin(dest, src, src + num);
 };
 
@@ -116,7 +81,7 @@ export const emscriptenMemcpyBig = async (
 export const emscriptenResizeHeap = async (
 	requestedSize: number
 ): Promise<boolean> => {
-	const oldSize = (await getCZBarInstance()).HEAPU8.length;
+	const oldSize = (await getCInstance()).HEAPU8.length;
 	requestedSize = requestedSize >>> 0;
 
 	const maxHeapSize = 2147483648;
@@ -145,7 +110,7 @@ export const emscriptenResizeHeap = async (
  * @void
  */
 export const updateGlobalBufferAndViews = async (buffer: ArrayBuffer) => {
-	const cBarcodeInstance = await getCZBarInstance();
+	const cBarcodeInstance = await getCInstance();
 	cBarcodeInstance['buffer'] = buffer;
 	cBarcodeInstance['HEAP8'] = new Int8Array(buffer);
 	cBarcodeInstance['HEAP16'] = new Int16Array(buffer);

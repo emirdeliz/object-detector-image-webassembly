@@ -5,7 +5,7 @@ const app = renderToString(App);
 const html = `
 	<html lang='en'>
 	<head>
-		<script src='app.js' async defer></script>
+		<script src='client.js' async defer></script>
 	</head>
 	<body>
 		<div id='root'>${app}</div>

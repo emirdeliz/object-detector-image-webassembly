@@ -1,0 +1,27 @@
+
+project(object_detector_on_image_cpp)
+cmake_minimum_required(VERSION 3.22)
+
+set(CMAKE_CXX_STANDARD 17)
+set(OPENCV_DIR /opt/opencv-4.6.0)
+
+set(OPENCV_CPP_REQUIRED_DEPS opencv_core opencv_flann opencv_imgproc
+    opencv_highgui opencv_ml opencv_video opencv_objdetect opencv_photo
+    opencv_features2d opencv_calib3d
+    opencv_stitching)
+
+include_directories(${OPENCV_CPP_REQUIRED_DEPS})
+
+# Needed for opencv2/opencv.hpp
+include_directories("${OPENCV_DIR}/include")
+include_directories("${OPENCV_DIR}/cmake")
+
+# # Needed by opencv.hpp for opencv2/core.hpp
+include_directories("/usr/local/include/opencv4")
+
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+add_executable(object_detector_on_image_cpp src/main.cpp)
+target_link_libraries(object_detector_on_image_cpp ${OpenCV_LIBS} ${OPENCV_CPP_REQUIRED_DEPS})
+
