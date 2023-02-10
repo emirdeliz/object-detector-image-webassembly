@@ -21,10 +21,15 @@ em++ \
   -I /main/opencv/modules/video/include \
   -I /main/opencv/modules/videoio/include \
   -I /main/opencv/modules/world/include \
-  -Os -Wall --no-entry \
+  -Os -Wall --no-entry --no-warn \
   -s USE_ZLIB=1 \
   -s MINIMAL_RUNTIME=1 \
-  -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
+  -s WARN_ON_UNDEFINED_SYMBOLS=0 \
   -s MINIMAL_RUNTIME=1 \
   -s EXPORT_NAME="cdecode" \
-  -o dist/webassembly/object-detector-on-image-cpp.html
+  -s EXPORTED_FUNCTIONS="[\
+		'_malloc',\
+		'_free',\
+		'_detectImageInsideImage'\
+	]" \
+  -o dist/webassembly/object-detector-on-image-cpp.js
