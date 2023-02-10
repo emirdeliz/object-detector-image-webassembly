@@ -13,8 +13,8 @@
 	},
 	"scripts": {
 		"build": "yarn run server:build & yarn run client:build",
-		"server:build": "esbuild src/server/index.ts --bundle --outfile=dist/server.js --platform=node && yarn start",
-		"client:build": "esbuild src/client/index.ts --bundle --watch --outfile=dist/client.js",
+		"server:build": "node esbuild.server.js && yarn start",
+		"client:build": "node esbuild.client.js",
 		"start:all": "yarn build",
 		"start": "node dist/server.js",
 		"lint:check": "eslint . --ext .ts --fix",

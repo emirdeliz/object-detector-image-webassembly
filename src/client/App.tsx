@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { detectImageInsideImage } from '../../webassembly/src/utils';
 
-import { detectImageInsideImage } from '../../webassembly/src/cUtils';
-
-const getFileFromUrl = async (name: string) => { 
+const getFileFromUrl = async (name: string) => {
 	const response = await fetch(`http://localhost:3000/${name}`);
-  const data = await response.blob();
-  const metadata = { type: 'image/png' };
+	const data = await response.blob();
+	const metadata = { type: 'image/png' };
 	const file = new File([data], name, metadata);
 	return file;
 }
@@ -17,7 +16,7 @@ const AppBase: React.FC = () => {
 		await testDetector();
 	}, []);
 
-	const testDetector = async() => { 
+	const testDetector = async () => {
 		const fileOne = await getFileFromUrl('doctor-house.png');
 		const fileTwo = await getFileFromUrl('doctor-house-tongue.png');
 		console.log(await detectImageInsideImage(fileOne, fileTwo));
