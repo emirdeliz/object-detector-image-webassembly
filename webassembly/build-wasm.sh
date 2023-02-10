@@ -1,6 +1,7 @@
 #!bin/sh
 
-em++ webassembly/cpp/brisk-detector.cpp \
+em++ \
+  webassembly/cpp/brisk-detector.cpp \
   -I /main/opencv/include \
   -I /main/opencv/build_wasm \
   -I /main/opencv/modules/calib3d/include \
@@ -20,11 +21,10 @@ em++ webassembly/cpp/brisk-detector.cpp \
   -I /main/opencv/modules/video/include \
   -I /main/opencv/modules/videoio/include \
   -I /main/opencv/modules/world/include \
-  -Os -Wall -g0 -Werror -DNDEBUG --no-entry \
+  -Os -Wall --no-entry \
   -s USE_ZLIB=1 \
-  -s ALLOW_MEMORY_GROWTH=1 \
+  -s MINIMAL_RUNTIME=1 \
   -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
   -s MINIMAL_RUNTIME=1 \
-  -s EXPORT_NAME="cdetector" \
-  -s EXPORTED_FUNCTIONS="['_malloc',  '_free', '_detectImageInsideImage']" \
-  -o dist/webassembly/object-detector-on-image-cpp.js
+  -s EXPORT_NAME="cdecode" \
+  -o dist/webassembly/object-detector-on-image-cpp.html

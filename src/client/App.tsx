@@ -1,6 +1,40 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { detectImageInsideImage } from '../../webassembly/src/utils';
 
+var cdetector = {};
+function binary(e) {
+	return new Promise(((t, r) => {
+		var n = new XMLHttpRequest;
+		n.open("GET", e, !0),
+			n.responseType = "arraybuffer", n.onload = () => {
+				t(n.response)
+			}, n.send(null)
+	}))
+}
+
+function script(e) {
+	return new Promise(((t, r) => {
+		var n = document.createElement("script");
+		n.src = e, n.onload = () => {
+			t()
+		}, document.body.appendChild(n)
+	}))
+}
+
+Promise.all([binary("webassembly/object-detector-on-image-cpp.js"), binary("webassembly/object-detector-on-image-cpp.wasm")]).then((e => {
+	cdetector.wasm = e[1];
+
+	console.log(e[0]);
+
+	var t = URL.createObjectURL(new Blob([e[0]], {
+		type: "application/javascript"
+	}));
+	script(t).then((() => {
+		URL.revokeObjectURL(t)
+	}))
+}))
+
+
 const getFileFromUrl = async (name: string) => {
 	const response = await fetch(`http://localhost:3000/${name}`);
 	const data = await response.blob();
@@ -17,9 +51,9 @@ const AppBase: React.FC = () => {
 	}, []);
 
 	const testDetector = async () => {
-		const fileOne = await getFileFromUrl('doctor-house.png');
-		const fileTwo = await getFileFromUrl('doctor-house-tongue.png');
-		console.log(await detectImageInsideImage(fileOne, fileTwo));
+		// const fileOne = await getFileFromUrl('doctor-house.png');
+		// const fileTwo = await getFileFromUrl('doctor-house-tongue.png');
+		// console.log(await detectImageInsideImage(fileOne, fileTwo));
 	}
 
 	useEffect(() => {
