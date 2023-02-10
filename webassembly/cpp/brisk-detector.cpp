@@ -61,16 +61,15 @@ vector<DMatch> get_best_matches(vector<DMatch> matches, Mat distances)
 }
 
 extern "C" {
-	val detectImageInsideImage(vector<ImageArg> images)
+	vector<DMatch> detectImageInsideImage(vector<ImageArg> images)
 	{
 		val result = val::object();
-		// Mat img1 = Mat(1, images[0].size, CV_8UC1, images[0].buffer);
-		// Mat img2 = Mat(1, images[1].size, CV_8UC1, images[1].buffer);
+		Mat img1 = Mat(1, images[0].size, CV_8UC1, images[0].buffer);
+		Mat img2 = Mat(1, images[1].size, CV_8UC1, images[1].buffer);
 
-		// auto [keyImg1, keyImg2, descImg1, descImg2, matches] = match_image(img1, img2);
-		// Mat distances = calc_distance(matches);
-		// vector<DMatch> bestMatches = get_best_matches(matches, distances);
-		// return bestMatches;
-		return result;
+		auto [keyImg1, keyImg2, descImg1, descImg2, matches] = match_image(img1, img2);
+		Mat distances = calc_distance(matches);
+		vector<DMatch> bestMatches = get_best_matches(matches, distances);
+		return bestMatches;
 	}
 }
