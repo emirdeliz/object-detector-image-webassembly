@@ -21,7 +21,7 @@ em++ \
   -I /main/opencv/modules/video/include \
   -I /main/opencv/modules/videoio/include \
   -I /main/opencv/modules/world/include \
-  -Os -Wall --no-entry --no-warn \
+  -Os -Wall --no-entry \
   -s USE_ZLIB=1 \
   -s MINIMAL_RUNTIME=1 \
   -s WARN_ON_UNDEFINED_SYMBOLS=0 \
