@@ -38,16 +38,18 @@ file(GLOB opencv_lib_core "${OPENCV_DIR}/build_wasm/lib/libopencv_core.a")
 target_link_libraries(object_detector_on_image_cpp ${opencv_lib_core})
 
 # Specify linker arguments
-set_target_properties(
-    object_detector_on_image_cpp
-    PROPERTIES
-    LINK_FLAGS " \
-        -Os -Wall -Werror --no-entry \
-        -s USE_ZLIB=1 \
-        -s ALLOW_MEMORY_GROWTH=1 \
-        -s MINIMAL_RUNTIME=1 \
-        -s EXPORTED_RUNTIME_METHODS=cwrap \
-        -s EXPORTED_FUNCTIONS=_free \
-        -s MINIFY_HTML=0 \
-    "
-)
+# set_target_properties(
+# object_detector_on_image_cpp
+# PROPERTIES
+# LINK_FLAGS "
+# -Os -Wall -g0 -Werror --no-entry \
+# -s USE_ZLIB=1 \
+# -s ALLOW_MEMORY_GROWTH=1 \
+# -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
+# -s MINIMAL_RUNTIME=1 \
+# -s EXPORT_NAME=\"cdetector\" \
+# -s EXPORTED_FUNCTIONS=_detectImageInsideImage \
+# -o webassembly/object-detector-on-image-cpp.js
+# "
+# )
+set_target_properties(object_detector_on_image_cpp PROPERTIES LINK_FLAGS "-s USE_ZLIB=1 -s ENVIRONMENT=web -s EXPORTED_FUNCTIONS=_free -s MODULARIZE=1 -s EXPORT_NAME=createDetectorModule")

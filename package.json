@@ -18,11 +18,11 @@
 		"start:all": "yarn build",
 		"start": "node dist/server.js",
 		"lint:check": "eslint . --ext .ts --fix",
-		"build:webassembly": "sh webassembly/build.sh"
+		"build:webassembly": "reset && sh webassembly/build-wasm.sh",
+		"emcc:clear:cache": "reset && emcc --clear-cache && emcc --clear-ports"
 	},
 	"dependencies": {
 		"eslint": "^8.33.0",
-		"object-detector-image-cpp": "https://github.com/emirdeliz/object-detector-image-cpp.git",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	},

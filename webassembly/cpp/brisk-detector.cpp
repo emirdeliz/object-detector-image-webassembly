@@ -2,20 +2,9 @@
 #include "opencv2/highgui.hpp"
 #include "opencv2/features2d.hpp"
 #include "emscripten.h"
-#include <emscripten/val.h>
 
 using namespace cv;
 using namespace std;
-using namespace emscripten;
-
-class ImageArg
-{
-public:
-	uint8_t *buffer;
-
-public:
-	size_t size;
-};
 
 std::tuple<vector<KeyPoint>, vector<KeyPoint>, Mat, Mat, vector<DMatch>> match_image(Mat img1, Mat img2)
 {
@@ -60,16 +49,37 @@ vector<DMatch> get_best_matches(vector<DMatch> matches, Mat distances)
 	return bestMatches;
 }
 
-extern "C" {
-	vector<DMatch> detectImageInsideImage(vector<ImageArg> images)
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+	EMSCRIPTEN_KEEPALIVE
+	float *detectImageInsideImage(
+			vector<uint8_t> buffers,
+			vector<size_t> sizes)
 	{
-		val result = val::object();
-		Mat img1 = Mat(1, images[0].size, CV_8UC1, images[0].buffer);
-		Mat img2 = Mat(1, images[1].size, CV_8UC1, images[1].buffer);
+		Mat img1 = Mat(1, sizes[0], CV_8UC1, buffers[0]);
+		Mat img2 = Mat(1, sizes[1], CV_8UC1, buffers[1]);
 
 		auto [keyImg1, keyImg2, descImg1, descImg2, matches] = match_image(img1, img2);
 		Mat distances = calc_distance(matches);
 		vector<DMatch> bestMatches = get_best_matches(matches, distances);
-		return bestMatches;
+
+		int bestMatchesSize = bestMatches.size();
+		float *result = static_cast<float *>(malloc(bestMatchesSize * 4));
+		for (int i = 0; i < bestMatchesSize; i++)
+		{
+
+			int idx1 = bestMatches[i].trainIdx;
+			int idx2 = bestMatches[i].queryIdx;
+
+			result[i * 4] = keyImg1[idx1].pt.x;
+			result[i * 4 + 1] = keyImg1[idx1].pt.y;
+			result[i * 4] = keyImg2[idx1].pt.x;
+			result[i * 4 + 1] = keyImg2[idx1].pt.y;
+		}
+		return result;
 	}
+#ifdef __cplusplus
 }
+#endif
