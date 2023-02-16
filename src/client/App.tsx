@@ -23,13 +23,7 @@ const AppBase: React.FC = () => {
 		const fileTwo = await getFileFromUrl('doctor-house-tongue.png');
 
 		setTimeout(async () => {
-			// @ts-ignore
-			_moduleDetector = await window.createDetectorModule();
-			console.log({
-				_moduleDetector
-			})
-			// @ts-ignore
-			// console.log(await globalThis._detectImageInsideImage(fileOne, fileTwo));
+			console.log(await detectImageInsideImage(fileOne, fileTwo));
 		}, 3000);
 	}
 
@@ -38,10 +32,25 @@ const AppBase: React.FC = () => {
 		initialize();
 	}, []);
 
+	const style = {
+		border: 'solid 3px red',
+		position: 'absolute',
+		width: '50px',
+		height: '117px',
+		top: `${452}px`,
+		left: `${271}px`
+	};
+
+	// 13/01 no valor de 382.49BRL
+
 	return (
 		<>
 			<h1>Hello World!</h1>
 			<h2>{clientMessage}</h2>
+			<div style={{ position: 'relative', border: 'solid 3px pink', width: '452px' }}>
+				<img src="doctor-house.png" />
+				<div style={style}></div>
+			</div>
 		</>
 	);
 };

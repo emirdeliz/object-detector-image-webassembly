@@ -12,7 +12,7 @@
 		"os": false
 	},
 	"scripts": {
-		"build": "yarn run server:build & yarn run client:build",
+		"build": "yarn run client:build & yarn run server:build",
 		"server:build": "node esbuild.server.js && yarn start",
 		"client:build": "node esbuild.client.js",
 		"start:all": "yarn build",
