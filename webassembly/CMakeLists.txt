@@ -53,4 +53,4 @@ target_link_libraries(object_detector_on_image_cpp ${opencv_lib_core})
 # -o webassembly/object-detector-on-image-cpp.js
 # "
 # )
-set_target_properties(object_detector_on_image_cpp PROPERTIES LINK_FLAGS "-O3 -s TOTAL_MEMORY=268435456 -s NO_DISABLE_EXCEPTION_CATCHING=1 -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s USE_ZLIB=1 -s EXPORTED_FUNCTIONS=_free,_malloc -s MODULARIZE=1 -s EXPORT_NAME=createDetectorModule")
+set_target_properties(object_detector_on_image_cpp PROPERTIES LINK_FLAGS "-Os -Wall -O3 -g0 -Werror --no-entry -s MINIMAL_RUNTIME=1 -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s USE_ZLIB=1 -s MINIMAL_RUNTIME=1 -s EXPORTED_FUNCTIONS=_detect_image_inside_image")
