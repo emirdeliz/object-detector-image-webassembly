@@ -1,6 +1,6 @@
 # object-detector-image-webassembly
 
-object-detector-image-webassembly
+### Object detector using opencv and webassembly.
 
 Demo: https://emirdeliz.github.io/object-detector-image-webassembly/
 
