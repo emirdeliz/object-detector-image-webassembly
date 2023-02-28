@@ -1,6 +1,6 @@
-# set(OPENCV_DIR "/main/opencv")
-set(OPENCV_DIR "/Volumes/Ficheiros/Dev/opencv")
+set(OPENCV_DIR "/main/opencv")
 
+# set(OPENCV_DIR "/Volumes/Ficheiros/Dev/opencv")
 cmake_minimum_required(VERSION 3.22)
 project(object_detector_on_image_cpp)
 
