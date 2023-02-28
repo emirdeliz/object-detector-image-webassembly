@@ -22,6 +22,7 @@
 		"emcc:clear:cache": "emcc --clear-cache && emcc --clear-ports"
 	},
 	"dependencies": {
+		"@typescript-eslint/parser": "^5.54.0",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2"
 	},
