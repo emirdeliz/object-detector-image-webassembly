@@ -1,86 +1,65 @@
-import { getModuleApi } from './wa';
+const Module = globalThis.Module;
 
-const loadImage = async (src: string) => {
-  // Load image
-  const imgBlob = await (await fetch(src)).blob();
-  const img = await createImageBitmap(imgBlob);
-  // Make canvas same size as image
-  const canvas = document.createElement('canvas');
-  canvas.width = img.width;
-  canvas.height = img.height;
-  // Draw image onto canvas
-  const ctx = canvas.getContext('2d');
-  ctx?.drawImage(img, 0, 0);
+export interface AppCoordinate {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+const passToWasm = (uint8ArrData: Uint8Array) => {
+  const numBytes = uint8ArrData.length * uint8ArrData.BYTES_PER_ELEMENT;
+  const dataPtr = Module._malloc(numBytes);
+  const dataOnHeap = new Uint8Array(Module.HEAPU8.buffer, dataPtr, numBytes);
+  dataOnHeap.set(uint8ArrData);
   return {
-    img,
-    imgData: ctx?.getImageData(0, 0, img.width, img.height) as ImageData
+    byteOffset: dataOnHeap.byteOffset,
+    length: uint8ArrData.length,
+  };
+};
+
+const loadImage = async (imgBlob: Blob) => {
+  const img = document.createElement("img");
+  const promise = new Promise<ImageData>((resolve) => {
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0);
+      const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
+      imageData && resolve(imageData);
+    };
+  });
+  img.src = URL.createObjectURL(imgBlob);
+  return promise;
+};
+
+export const processImages = async (imgBlob: Blob, templBlob: Blob) => {
+  const img = await loadImage(imgBlob);
+  const templ = await loadImage(templBlob);
+  const imgUint = passToWasm(new Uint8Array(img.data.buffer));
+  const templUint = passToWasm(new Uint8Array(templ.data.buffer));
+
+  try {
+    const resultPtr = Module._check_image(
+      imgUint.byteOffset,
+      img.width,
+      img.height,
+      templUint.byteOffset,
+      templ.width,
+      templ.height
+    );
+
+    const result = new Int32Array(Module.asm.memory.buffer, resultPtr, 4);
+    return {
+      x: result[0] - templ.width,
+      width: result[1],
+      y: result[2] - templ.height,
+      height: result[3],
+    };
+  } catch (e) {
+    console.log({ e });
   }
-}
-
-const prepareWasmData = async (imageSrc: string) => { 
-  const imgInfo = await loadImage(imageSrc);
-  const moduleApi = await getModuleApi();
-  const { width, height } = imgInfo.img;
-  const { imgData } = imgInfo;
-  const pointer = moduleApi.create_buffer(width, height);
-  if (( width * height * 4) !== imgData.data.byteLength) {
-    throw Error('dataBuf does not match width and height');
-  }
-
-  moduleApi.HEAPU8.set(imgData.data.buffer, pointer);
-  return pointer;
-}
-
-export const processImages = async(imageSrc: string, templateSrc: string) => { 
-  const imgPointer = await prepareWasmData(imageSrc);
-  const templatePointer = await prepareWasmData(templateSrc);
-  const moduleApi = await getModuleApi();
-
-  const length = 4;
-  const offset = length * Int8Array.BYTES_PER_ELEMENT;
-
-  const result = new Uint8Array(moduleApi.memory.buffer, 0, 4);
-  await moduleApi.detect_image_inside_image(
-    imgPointer,
-    templatePointer,
-    result.byteOffset
-  );
-
-  console.log({
-    x: moduleApi.HEAP32[0],
-    y: moduleApi.HEAP32[1],
-    width: moduleApi.HEAP32[2],
-    height: moduleApi.HEAP32[3],
-  })
-
-  // const resultView = new DataView(moduleApi.memory.buffer);
-  // const result = {
-  //   x: resultView.getUint8(0),
-  //   y: resultView.getUint8(1),
-  //   width: resultView.getUint8(2),
-  //   height: resultView.getUint8(3),
-  // }
-
-  // const resultView = new Uint8Array(moduleApi.HEAP8.buffer, resultPtr, 4);
-  // const result = new Uint8Array(resultView);
-
-   // api.encode(p, image.width, image.height, 100);
-  // const result = await moduleApi.get_result();
-  // const resultSize = moduleApi.get_result_size();
-  // const resultView = new Uint8Array(moduleApi.HEAP8.buffer, resultPointer, resultSize);
-  // const result = new Uint8Array(resultView);
-  // moduleApi.free_result(resultPointer);
-
-  // console.log({
-  //   point_0: result[0],
-	// 	point_1: result[1],
-	// 	point_2: result[2],
-  //   point_3: result[3],
-  // })
-
-  // console.log(result);
-
-  moduleApi.destroy_buffer(imgPointer);
-  moduleApi.destroy_buffer(templatePointer);
-  return result;
-}
+};

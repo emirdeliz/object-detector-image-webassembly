@@ -1,91 +1,36 @@
-#include <opencv2/opencv.hpp>
-#include <emscripten.h>
+#include "opencv2/opencv.hpp"
+#include "opencv2/core.hpp"
+#include "emscripten.h"
 
 using namespace cv;
 using namespace std;
-
-void getUint8tFromPointer(const int &addr, const size_t &len, uint8_t *data)
-{
-	for (size_t i = 0; i < len; ++i)
-	{
-		data[i] += 1;
-	}
-}
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-	EMSCRIPTEN_KEEPALIVE
-	uint8_t *create_buffer(int width, int height)
+	int result[4];
+
+	int *EMSCRIPTEN_KEEPALIVE check_image(
+			unsigned char *img_data, int img_width, int img_height,
+			unsigned char *templ_data, int templ_width, int templ_height)
 	{
-		return (uint8_t *)malloc(width * height * 4 * sizeof(uint8_t));
-	}
+		emscripten_log(EM_LOG_CONSOLE, "Match found at (%d, %d)", img_data, templ_data);
 
-	EMSCRIPTEN_KEEPALIVE
-	void destroy_buffer(uint8_t *p)
-	{
-		free(p);
-	}
+		Mat img(img_height, img_width, CV_8UC4, img_data);
+		Mat templ(templ_height, templ_width, CV_8UC4, templ_data);
 
-	int point[4];
+		Mat result_base;
+		matchTemplate(img, templ, result_base, TM_CCOEFF_NORMED);
 
-	EMSCRIPTEN_KEEPALIVE
-	void detect_image_inside_image(
-			const int addr1,
-			const int addr2,
-			int *result)
-	{
-		result[0] = 33;
-		result[1] = 44;
-		result[2] = 55;
-		result[3] = 77;
+		Point max_loc;
+		minMaxLoc(result_base, nullptr, nullptr, nullptr, &max_loc);
 
-		// int length = 4;
-		// for (int i = 0; i < length; ++i)
-		// {
-		// 	result[i] = 55;
-		// }
-
-		// uint8_t *data1 = reinterpret_cast<uint8_t *>(addr1);
-		// getUint8tFromPointer(addr1, sizeof(data1), data1);
-
-		// uint8_t *data2 = reinterpret_cast<uint8_t *>(addr2);
-		// getUint8tFromPointer(addr2, sizeof(data2), data2);
-
-		// Mat img = Mat(1, sizeof(data1), CV_8UC1, data1);
-		// Mat templ = Mat(1, sizeof(data2), CV_8UC1, data2);
-
-		// int match_method = TM_CCOEFF;
-
-		// // Source image to display
-		// Mat img_display;
-		// img.copyTo(img_display);
-
-		// // Create the result matrix
-		// Mat result;
-		// int result_cols = img.cols - templ.cols + 1;
-		// int result_rows = img.rows - templ.rows + 1;
-		// result.create(result_cols, result_rows, CV_8UC1);
-
-		// // Do the Matching and Normalize
-		// matchTemplate(img, templ, result, match_method);
-		// normalize(result, result, 0, 1, NORM_MINMAX, -1, Mat());
-
-		// // Localizing the best match with minMaxLoc
-		// double minVal;
-		// double maxVal;
-		// Point minLoc;
-		// Point maxLoc;
-		// Point matchLoc;
-
-		// minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
-		// matchLoc = maxLoc;
-
-		// targetResult[0] = matchLoc.x;
-		// targetResult[1] = matchLoc.y;
-		// targetResult[2] = result_rows;
-		// targetResult[3] = result_cols;
+		result[0] = max_loc.x + templ.cols;
+		result[1] = templ_width;
+		result[2] = max_loc.y + templ.rows;
+		result[3] = templ_height;
+		return result;
 	}
 #ifdef __cplusplus
 }

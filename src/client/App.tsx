@@ -1,69 +1,57 @@
-import React, { useCallback, useEffect, useState } from 'react';
-
-import { processImages } from '../../webassembly/src/utils';
-
-const getFileFromUrl = async (name: string) => {
-	const response = await fetch(`http://localhost:3000/${name}`);
-	const imgBlob = await response.blob();
-	return imgBlob;
-}
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { AppCoordinate, processImages } from '../../webassembly/src/utils';
 
 const AppBase: React.FC = () => {
-	const [clientMessage, setClientMessage] = useState('');
-	const initialize = useCallback(async () => {
-		await testDetector();
-	}, []);
+	const imgRef = useRef<HTMLImageElement | null>(null);
+	const [img, setImg] = useState<File>();
+	const [templ, setTempl] = useState<File>();
+	const [data, setData] = useState<AppCoordinate>();
 
-	const testDetector = async () => {
-		// const fileOne = await getFileFromUrl('doctor-house.png');
-		// const fileTwo = await getFileFromUrl('doctor-house-tongue.png');
-
-		const fileOneUrl = 'http://localhost:3000/doctor-house.png';
-		const fileTwoUrl = 'http://localhost:3000/doctor-house-tongue.png'
-
-		// setTimeout(async () => {
-		// console.log(
-			await processImages(fileOneUrl, fileTwoUrl)
-		// );
-		// }, 1000);
+	const setImgFile = async (files: FileList|null, setState: Function) => { 
+		const file = files ? files[0] : null;
+		setState(file);
 	}
 
 	useEffect(() => {
-		setClientMessage('Hello From React');
-		initialize();
-	}, []);
+		if (!img || !templ) {
+			return;
+		}
+		(async () => {
+			const result = await processImages(img, templ);
+			result && setData(result);
+		})();
+	}, [img, templ])
 
-	const style = {
-		border: 'solid 3px red',
-		position: 'absolute',
-		width: '50px',
-		height: '117px',
-		top: `${452}px`,
-		left: `${271}px`
-	};
+	const imgUrl = useMemo(() => {
+		return img ? URL.createObjectURL(img) : '';
+	}, [img]);
 
-	// 13/01 no valor de 382.49BRL
-	/* <div style={style}></div> */
-	
 	return (
 		<div>
-			<h1>Hello World!</h1>
-			<h2>{clientMessage}</h2>
-			<div style={{
-				position: 'relative',
-				border: 'solid 3px pink',
-				width: '452px',
-				height: '665px',
-				backgroundImage: 'url(doctor-house.png)',
-				backgroundSize: 'contain'
-			}}>
+			<h1>Find image</h1>
+			<label>
+				Upload image
+				<input type="file" accept=".png, .jpg, .jpeg" onChange={(e) => setImgFile(e.target.files, setImg)} />
+			</label>
+			<label>
+				Upload image to find
+				<input type="file" accept=".png, .jpg, .jpeg" onChange={(e) => setImgFile(e.target.files, setTempl)} />
+			</label>
+			<div className="result-container">
+				<img ref={imgRef} src={imgUrl} />
+				<span style={{
+					border: 'solid 3px red',
+					display: data?.x ? 'block' : 'none',
+					position: 'absolute',
+					width:  `${data?.width || 0}px`,
+					height: `${data?.height || 0}px`,
+					top: `${data?.y || 0}px`,
+					left: `${data?.x || 0}px`
+					}}
+				/>
 			</div>
 		</div>
 	);
 };
 
 export const App = <AppBase />;
-
-// clear && yarn server:build && yarn start
-
-// https://github.com/adamjberg/react-ssr
