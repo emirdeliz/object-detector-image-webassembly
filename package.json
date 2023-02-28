@@ -13,9 +13,9 @@
 	},
 	"scripts": {
 		"build": "yarn run client:build & yarn run server:build",
-		"server:build": "node esbuild.server.js && yarn start",
+		"server:build": "node esbuild.server.js",
 		"client:build": "node esbuild.client.js",
-		"start:all": "yarn build",
+		"start:all": "yarn build && yarn start",
 		"start": "node dist/server.js",
 		"lint:check": "eslint . --ext .ts --fix",
 		"build:webassembly": "reset && sh webassembly/build-wasm.sh",
