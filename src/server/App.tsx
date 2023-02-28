@@ -14,6 +14,10 @@ const html = `
 			.result-container {
 				position: relative;
 			}
+
+			* {
+				font-family: Courier, "Lucida Console", monospace;
+			}
 		</style>
 	</head>
 	<body>

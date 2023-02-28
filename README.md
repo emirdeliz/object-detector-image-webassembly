@@ -1,6 +1,7 @@
 # object-detector-image-webassembly
+
 object-detector-image-webassembly
 
-Start docker-compose and docker-sync using yarn. 
+Demo: https://emirdeliz.github.io/object-detector-image-webassembly/
 
-yarn --cwd=object-detector-image-webassembly sync:restart
+<img src="https://raw.githubusercontent.com/emirdeliz/object-detector-image-cpp/master/docs/demo.png" width="700" height="auto" alt="Object Detector - example"/>

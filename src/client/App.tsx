@@ -30,11 +30,11 @@ const AppBase: React.FC = () => {
 		<div>
 			<h1>Find image</h1>
 			<label>
-				Upload image
+				Image base
 				<input type="file" accept=".png, .jpg, .jpeg" onChange={(e) => setImgFile(e.target.files, setImg)} />
 			</label>
 			<label>
-				Upload image to find
+				Image to find
 				<input type="file" accept=".png, .jpg, .jpeg" onChange={(e) => setImgFile(e.target.files, setTempl)} />
 			</label>
 			<div className="result-container">
